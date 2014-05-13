@@ -18,7 +18,8 @@ angular.module('selectionModel').directive('selectionModel', [
           , defaultSelectedClass = defaultOptions.selectedClass
           , defaultType = defaultOptions.type
           , defaultMode = defaultOptions.mode
-          , defaultCleanupStrategy = defaultOptions.cleanupStrategy;
+          , defaultCleanupStrategy = defaultOptions.cleanupStrategy
+          , defaultSelectEvent = defaultOptions.selectEvent;
 
         /**
          * The selection model type
@@ -76,6 +77,14 @@ angular.module('selectionModel').directive('selectionModel', [
          * otherwise no longer visible on the client.
          */
         var cleanupStrategy = attrs.selectionModelCleanupStrategy || defaultCleanupStrategy;
+
+        /**
+         * The event that triggers a selection change
+         *
+         * By default this will be the `click` event but in some cases you may
+         * want to use another compatible event such as `mousedown`
+         */
+        var selectEvent = attrs.selectionModelSelectEvent || defaultSelectEvent;
 
         /**
          * The list of items
@@ -249,7 +258,7 @@ angular.module('selectionModel').directive('selectionModel', [
           scope.$apply();
         };
 
-        element.on('click', handleClick);
+        element.on(selectEvent, handleClick);
         if('checkbox' === smType) {
           var elCb = element.find('input');
           if(elCb[0] && 'checkbox' === elCb[0].type) {

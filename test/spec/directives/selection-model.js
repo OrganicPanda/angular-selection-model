@@ -85,7 +85,7 @@ describe('Directive: selectionModel', function() {
     beforeEach(function() {
       el = compile(tpl, scope);
     });
-    
+
     it('should set first checkbox values', function() {
       expect(el.find('tr').first().find('input').prop('checked')).toBe(true);
       expect(el.find('tr').last().find('input').prop('checked')).toBe(false);
@@ -192,7 +192,7 @@ describe('Directive: selectionModel', function() {
     beforeEach(function() {
       scope.myFilter = '';
     });
-  
+
     afterEach(function() {
       delete scope.myFilter;
     });
@@ -261,7 +261,33 @@ describe('Directive: selectionModel', function() {
       el.children().first().click();
       expect(scope.selection.length).toBe(1);
     });
-    
+
+  });
+
+  describe('with a custom select event', function() {
+    var el, tpl = [
+      '<ul>',
+        '<li ng-repeat="item in bag" ',
+            'selection-model ',
+            'selection-model-select-event="mousedown">',
+          '{{item.value}} <input type="checkbox">',
+        '</li>',
+      '</ul>'
+    ].join('');
+
+    beforeEach(function() {
+      el = compile(tpl, scope);
+    });
+
+    it('should respond to mousedown', function() {
+      el.find('li').first().mousedown();
+      expect(el.find('li').first().hasClass('selected')).toBe(true);
+    });
+
+    it('should not respond to click', function() {
+      el.find('li').last().click();
+      expect(el.find('li').last().hasClass('selected')).toBe(false);
+    });
   });
 
 });
